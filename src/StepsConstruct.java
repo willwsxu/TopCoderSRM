@@ -18,19 +18,26 @@ public class StepsConstruct {
     int m=0;    // columns
     int steps=0;
     String answer="";
+    long totalVisits=0;
     String visitPaths(String[] board, String path, int i, int j)
     {
+        if ( !answer.isEmpty() )
+            return answer;
+        if (++totalVisits %100000000==0)
+            out.println("visit count "+totalVisits+" path "+path.length()+":"+path);
         if ( board[i].charAt(j)=='#')
             return "";
         //out.println(path+ " at "+i+" "+j);
-        if (path.length()>steps)
-            return "";
         if (i==n-1 && j==m-1) {
             if (path.length()==steps) {
                 answer = path;
+                out.println("got it "+path);
                 return path;
             }
+            return "";
         }
+        if (path.length()+n-1-i+m-1-j>steps)
+            return "";
         visitLeft(board, path, i, j);
         visitRight(board, path, i, j);
         visitTop(board, path, i, j);
@@ -42,23 +49,17 @@ public class StepsConstruct {
     {
         if (j--==0)
             return;
-        if ( board[i].charAt(j)=='#')
-            return;
         visitPaths(board, path+"L", i,j);
     }
     void visitRight(String[] board, String path, int i, int j)
     {
         if (++j==m)
             return;
-        if ( board[i].charAt(j)=='#')
-            return;
         visitPaths(board, path+"R", i, j);
     }
     void visitTop(String[] board, String path, int i, int j)
     {
         if (i--==0)
-            return;
-        if ( board[i].charAt(j)=='#')
             return;
         visitPaths(board, path+"U", i, j);
     }
@@ -67,11 +68,91 @@ public class StepsConstruct {
     {
         if (++i==n)
             return;
-        if ( board[i].charAt(j)=='#')
-            return;
         visitPaths(board, path+"D", i, j);
     }
     
+    // check if there is a way to reach bottom right square    
+    boolean visitLeft2(char [][]board2, int i, int j)
+    {
+        if (j--==0)
+            return true;
+        return blockSquare(board2, i, j);
+    }
+    boolean visitUp2(char [][]board2, int i, int j)
+    {
+        if (i--==0)
+            return true;
+        return blockSquare(board2, i, j);
+    }
+    boolean visitRight2(char [][]board2, int i, int j)
+    {
+        if (++j==m)
+            return true;
+        return blockSquare(board2, i, j);
+    }
+    boolean visitDown2(char [][]board2, int i, int j)
+    {
+        if (++i==n)
+            return true;
+        return blockSquare(board2, i, j);
+    }
+    boolean isRightBlocked(char [][]board2, int i, int j)
+    {
+        if (++j==m)
+            return true;
+        if (board2[i][j]=='#')
+            return true;
+        return false;
+    }
+    boolean isDownBlocked(char [][]board2, int i, int j)
+    {
+        if (++i==n)
+            return true;
+        if (board2[i][j]=='#')
+            return true;
+        return false;
+    }
+    boolean blockSquare(char [][]board2, int i, int j)
+    {
+        if (board2[i][j]=='#')
+            return true;
+        if ( i==n-1 && j==m-1)
+            return false;
+        if ( isRightBlocked(board2, i, j) && isDownBlocked(board2, i, j)) {
+            board2[i][j]='#'; // mark it as blocked if it cannot go down or right
+            return true;
+        }
+        visitDown2(board2, i, j);
+        visitRight2(board2, i, j);
+        visitUp2(board2, i, j);
+        visitLeft2(board2, i, j);
+        return false;
+    }
+    boolean isPathViable(String[] board)
+    {
+        n = board.length;
+        m = board[0].length();
+        if ( board[0].charAt(0)=='#')
+            return false;
+        if ( board[n-1].charAt(m-1)=='#')
+            return false;
+        char [][]board2 = new char[n][m];
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                board2[i][j]=board[i].charAt(j);
+            }
+        }
+        blockSquare(board2, 0, 0);
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                out.print(board2[i][j]);
+            }
+            out.println();
+        }
+        boolean blocked = isRightBlocked(board2,0,0) && isRightBlocked(board2,0,0);
+        out.println("path "+(blocked?"BAD":"OK"));
+        return blocked;
+    }
     String construct(String[] board, int k)
     {
         n = board.length;
@@ -85,27 +166,27 @@ public class StepsConstruct {
             out.println("Bad grid column "+m);
             return "";
         }
-        out.println("First grid column "+m);
+        out.println("Board dimasion "+n+", " +m);
         visitPaths(board, "", 0, 0);
+        out.println((answer.isEmpty()?"fail: ":("success " +answer))+" visits "+totalVisits);
         return answer;
     }
     
     public static void main(String[] args) {
         String s;
-        
+        /*
+        // DDRR
         s = new StepsConstruct().construct(new String[]{"...", ".#.", "..."}, 4);
-        out.println("success " +s);
+        // DDUDUDUDUDRR  
         s = new StepsConstruct().construct(new String[]{"...", ".#.", "..."}, 12);
-        out.println("success " +s);
+        // none
         s = new StepsConstruct().construct(new String[]{"..#", "#.#", "..#", ".#.", "..."}, 6);
-        out.println("success " +s);
+        // DDDDRRUUUURRDDDD
         s = new StepsConstruct().construct(new String[]{".#...", ".#.#.", ".#.#.", ".#.#.", "...#."}, 16);
-        out.println("success " +s);
+        // none
         s = new StepsConstruct().construct(new String[]{"#.", ".."}, 2);
-        out.println("success " +s);   
-
-        s = new StepsConstruct().construct(new String[]{"...#.", "..#..", ".#..."}, 100);
-        out.println("success " +s);    
-
+        */
+        new StepsConstruct().isPathViable(new String[]{"...#.", "..#..", ".#..."});
+        //s = new StepsConstruct().construct(new String[]{"...#.", "..#..", ".#..."}, 100);
     }
 }

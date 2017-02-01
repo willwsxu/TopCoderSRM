@@ -8,6 +8,11 @@
  *
  * @author WXU
  */
+// in a 2N x 2N board, it contains values 'A", 'B', or '.'
+// Starting from center 4 squares, if it has more A than, Alice wins, else if it has more Bs, Bob wins.
+// if it has same A or B, count all squares surronding the previous center squares
+// use the same scheme to decide winners at this layer
+// if it is a draw, check the next outer layer
 public class ABoardGame
 {
     // return 0 draw, negative A lose, positive A wins

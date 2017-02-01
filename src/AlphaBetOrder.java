@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Andy
  */
-// all letter follow one single order in all words
+// test if it is possible that all letter follow one single order in all words
 public class AlphaBetOrder {
     
     public static final String good = "Possible";

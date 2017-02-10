@@ -1,0 +1,82 @@
+Problem Statement
+Please note that this problem has non-standard time and memory limits: 10 seconds and 384 megabytes. 
+
+Little Petya likes points on a plane a lot. Recently he has received a set of N points from his mother. Points are numbered with integers from 0 to N-1. The i-th point has coordinates (X[i], Y[i]). The only thing Petya likes more than points is playing with little Masha. She suggested that they should play a simple game with his set of points. Masha wrote two numbers P[i] and T[i] on each point. Afterwards, she drew some arrows between the points according to the following rule: There is an arrow from point i to point j if and only if min(|X[i] - X[j]|, |Y[i] - Y[j]|) <= P[i]. Note that the property uses the value P[i] of the source point. If P[i] and P[j] differ, it is possible that there is an arrow in one direction but not in the other.
+
+
+At the beginning of the game the children put a chip on the point S. In every turn they move the chip along any arrow that is directed from the current point to some other one. When they move a chip from the i-th point to the j-th one, they get max(T[i], T[j]) penalty points. Petya found this game boring very soon, because no one wins or loses here. Instead of just playing the game arbitrarily, Petya decided to focus on minimizing the penalty points. For each point K (from 0 to N-1, inclusive) Petya wants to answer the following question: "What is the smallest total number of penalty points I can receive if I want to move the chip from S to K?
+
+As N can be very large, you will have to generate X[i], Y[i], P[i] and T[i] in your program. In order to do this you are given params that contains 16 ints. Use the following pseudocode to generate X, Y, P and T:
+
+X[0] = params[0];
+Y[0] = params[4];
+P[0] = params[8];
+T[0] = params[12];
+for (i = 1; i < N; i++) {
+    X[i] = (X[i - 1] * params[1] + params[2]) % params[3];
+    Y[i] = (Y[i - 1] * params[5] + params[6]) % params[7];
+    P[i] = (P[i - 1] * params[9] + params[10]) % params[11];
+    T[i] = (T[i - 1] * params[13] + params[14]) % params[15];
+}
+
+Note that if two points with different indices have the same coordinates, they are still treated as two different points.
+
+
+Your goal is to find D[i] - the smallest number of penalty points that can be achieved when moving the chip to the i-th point from the point S for all i from 0 to N - 1. If the i-th point is unreachable we assume that D[i] = 1.5 * 10^14. Return the sum of D[i] for all i from 0 to N - 1.
+
+Definition
+Class: JumpingOnPoints
+Method: sumOfDistances
+Parameters: int, int, int[]
+Returns: long
+Method signature: long sumOfDistances(int N, int S, int[] params)
+(be sure your method is public)
+
+Limits
+Time limit (s): 10.000
+Memory limit (MB): 384
+Constraints
+- N will be between 1 and 60 000, inclusive.
+- S will be between 0 and N - 1, inclusive.
+- Each of the params[1], params[2], params[5], params[6], params[9], params[10], params[13], params[14] will between 0 and 1 000 000 000, inclusive.
+- Each of the params[3], params[7], params[11], params[15] will between 1 and 1 000 000 000, inclusive.
+- params[0] will be between 0 and params[3] - 1, inclusive.
+- params[4] will be between 0 and params[7] - 1, inclusive.
+- params[8] will be between 0 and params[11] - 1, inclusive.
+- params[12] will be between 0 and params[15] - 1, inclusive.
+Examples
+0)
+2
+0
+{0, 0, 5, 100, 0, 0, 5, 100, 0, 0, 10, 100, 1, 1, 0, 100}
+Returns: 150000000000000
+Here we can't make a move from the point 0 to the point 1.
+1)
+3
+1
+{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}
+Returns: 18
+Here X = {1, 1, 1}, Y = {5, 5, 5}, P = {9, 5, 1}, T = {13, 5, 5}. We can reach both point 0 and point 2 in just one move.
+2)
+4
+0
+{0, 1, 1, 100, 0, 1, 1, 100, 1, 1, 0, 100, 0, 0, 1, 2}
+Returns: 6
+Here X = {0, 1, 2, 3}, Y = {0, 1, 2, 3}, P = {1, 1, 1, 1} and T = {0, 1, 1, 1}.
+3)
+60000
+0
+{0, 1, 1, 1000000000, 0, 1, 1, 1000000000, 1, 1, 0, 1000000000, 999999999, 1, 0, 1000000000}
+Returns: 1799969998200030000
+Here the i-th point for i > 0 can be reached only from the (i-1)-th point.
+4)
+6
+0
+{0, 1, 5, 15, 0, 1, 5, 10, 0, 0, 0, 1,1,1,1,3}
+Returns: 8
+5)
+1000
+286
+{11111, 11111, 111111, 11111111, 12121, 12111, 13131, 11111111, 13, 14444, 44312, 222211, 13131, 328655, 11373, 999999993}
+Returns: 738940004832
+Use 64-bit data type for generating the input data in order to avoid overflow.

@@ -1,0 +1,46 @@
+Problem Statement
+Definition
+Class: DNAsynth
+Method: longest
+Parameters: String[]
+Returns: int
+Method signature: int longest(String[] reactivity)
+(be sure your method is public)
+Limits
+Time limit (s): 840.000
+
+Memory limit (MB): 64
+Notes
+- Assume that Dr. Ford has an unlimited starting supply of all the strands represented by SEQ1 and SEQ2 in each element of reactivity.
+Constraints
+- reactivity will contain between 1 and 50 elements, inclusive.
+- each element of reactivity will contain between 5 and 9 characters, inclusive.
+- each element of reactivity will be formatted as (quotes added for clarity) "SEQ1:SEQ2" with SEQ1 and SEQ2 both being of length between 2 and 4 characters, inclusive, and separated by a single colon (':').
+- SEQ1 and SEQ2 may only contain the capital letters 'A', 'G', 'C', and 'T'.
+
+Examples
+0)
+{"TTA:AGG"}
+Returns: 6
+The longest possible strand is "TTAAGG" (or "GGAATT", which is the same thing backwards--these will no longer be mentioned).
+1)
+{"TTA:AGG","AGG:CCC"}
+Returns: 15
+The longest possible strand is "TTAAGGCCCGGAATT"
+2)
+{"CCC:AAA","AAA:CCC"}
+Returns: -1
+3)
+{"AG:AC","AT:GC","GC:AG"}
+Returns: 8
+4)
+{"TAG:ATC","GCA:CCCT","GAT:AC"}
+Returns: 9
+Notice that since he has "ACG" ("GCA" backwards) in supply, and it begins with "AC", it can be added to "GAT". This gives the sequence "GATACG". Adding "ATC" on the front end gives the longest possible strand, which is "CTAGATACG".
+5)
+{"TG:GA","CGGG:TGG","GGA:AAAC"}
+Returns: 12
+The longest sequence here is CGGGTGGAAAAC. First, we form TGGA from the first rule. Since this starts with TGG, we can append it to CGGG to get CGGGTGGA, which ends with GGA. So we can append AAAC to the end and get CGGGTGGAAAAC
+6)
+{"CCCA:TGGG","TGG:GGA","GGGA:CCCA"}
+Returns: -1

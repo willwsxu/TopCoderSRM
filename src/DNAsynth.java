@@ -54,7 +54,7 @@ public class DNAsynth {
         graph.forEach((k,v)->{
         for (String seq2 : v)  // start with any initial pair
             fullSearch(k+seq2);});
-        out.println(longDNA+":"+longDNA.length());
+        out.println(longDNA+":"+longDNA.length()+(loop?":infinit":""));
 
         if (loop)
             return -1;
@@ -64,26 +64,38 @@ public class DNAsynth {
     boolean loop=false;
     void fullSearch(String DNA)
     {
-        graph.forEach((k,v)->{if (DNA.endsWith(k))
-        {
-            for (String seq2: v) {
-                if (DNA.startsWith(seq2)) {
-                    longDNA="";
-                    loop = true;
-                    return;
+        if (loop) {  // skip 
+            longDNA="";
+            return;
+        }
+        graph.forEach((k,v)->{
+            if (DNA.endsWith(k))
+            {   // if DNA ends with seq1, append seq2, unless
+                for (String seq2: v) { // DNA also start with seq2, it is infinit loop
+                    if (DNA.startsWith(seq2)) {
+                        longDNA="";
+                        loop = true;
+                        return;
+                    }
+                    if (loop) {  // skip 
+                        return;
+                    }
+                    fullSearch(DNA+seq2);
                 }
+            }else {
                 if (loop) {  // skip 
                     return;
                 }
-                fullSearch(DNA+seq2);
+                // if DNA starts with seq2, prepend seq1
+                for (String seq2: v) {
+                    if (DNA.startsWith(seq2)) {
+                        fullSearch(k+DNA);
+                    }
+                }
+                if (DNA.length()>longDNA.length())
+                    longDNA = DNA;
             }
-        }else {
-            if (loop) {  // skip 
-                return;
-            }
-            if (DNA.length()>longDNA.length())
-                longDNA = DNA;
-        }});
+        });
     }
     
     public static void main(String[]args)
@@ -94,5 +106,6 @@ public class DNAsynth {
         new DNAsynth().longest(new String[]{"AG:AC","AT:GC","GC:AG"});
         new DNAsynth().longest(new String[]{"TAG:ATC","GCA:CCCT","GAT:AC"});
         new DNAsynth().longest(new String[]{"TG:GA","CGGG:TGG","GGA:AAAC"});
+        new DNAsynth().longest(new String[]{"CCCA:TGGG","TGG:GGA","GGGA:CCCA"});
     }
 }

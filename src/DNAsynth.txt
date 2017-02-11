@@ -1,4 +1,10 @@
 Problem Statement
+Dr. Ford of TC Laboratories has discovered a new way of synthesizing DNA sequences from shorter DNA sequences. DNA sequences are composed of nucleotides, A, G, C, and T
+He's discovered a miracle catalyst that enables certain sequences of DNA to append to other certain sequences of nucleotides. A catalyzation represented by the notation "<SEQ1>:<SEQ2>" means that any sequence starting in <SEQ2> may be appended to any sequence ending in <SEQ1>.
+For example, "GCT:AGG" means that any sequence starting with AGG may be appended to any sequence ending in GCT. Thus, by this rule, AGGCGACG may be appended to CATGCT to produce the sequence CATGCTAGGCGACG.
+Also, since a DNA sequence is identical to its reverse, "<SEQ1>:<SEQ2>" implies "<reverse(SEQ2)>:<reverse(SEQ1)>". For example, "GCT:AGG" is the same as "GGA:TCG". Note, however, "GCT:AGG" is NOT the same as "AGG:GCT".
+Given a set of possible catalyzations determine the length of the longest DNA sequence which can be constructed, starting with an unlimited supply of the sequences <SEQ1> and <SEQ2> in the list of catalyzations. If sequences of unlimited length are possible, return -1.
+
 Definition
 Class: DNAsynth
 Method: longest

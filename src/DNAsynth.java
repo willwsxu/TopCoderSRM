@@ -14,6 +14,11 @@ import java.util.TreeSet;
 /**
  *
  * @author wxu
+ * SEQ1:SEQ2 DNA ends with SEQ1 can connect to DNA begin with SEQ2
+ *   reverse direction works too
+ *   DNA ends with SEQ2 reverse can connect to DNA begin with SEQ1 reverse
+ * Find longest sequence. If sequences of unlimited length are possible, return -1
+ * Design idea:
  */
 public class DNAsynth {
     Map<String, Set<String>>    graph=new TreeMap<>();

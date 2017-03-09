@@ -1,0 +1,55 @@
+Problem Statement
+Hero has a collection of (not necessarily distinct) strings. You are given this collection in the patterns. Each character in each string is one of '0', '1', '2', and '3'. Hero also has a string of wildcard characters. You are given it as the S. Each character of S is either 'a' or 'b'. You are allowed to modify S by changing some (possibly none or all) characters to their uppercase versions: that is 'a' to 'A' and 'b' to 'B'. The meaning of the wildcard characters in S is as follows:
+'a' matches small digits: '0' and '1'
+'A' matches big digits: '2' and '3'
+'b' matches even digits: '0' and '2'
+'B' matches odd digits: '1' and '3'
+We say that S contains an occurrence of the pattern p at position j if for each valid i the wildcard character S[j+i] exists and matches the digit patterns[p][i]. As we already mentioned above, you are allowed to modify S by changing some of its letters to uppercase. Your goal is to maximize the total number of occurrences of the given patterns in your modified S. In other words, you want to maximize the number of pairs (p,j) such that your modified S contains an occurrence of the pattern p at position j. Compute and return the largest possible total number of occurrences of the given patterns in the modified string of wildcards.
+Definition
+Class: Softmatch
+Method: count
+Parameters: String, String[]
+Returns: int
+Method signature: int count(String S, String[] patterns)
+(be sure your method is public)
+Limits
+Time limit (s): 2.000
+Memory limit (MB): 256
+Constraints
+- S will contain between 1 and 50 characters, inclusive.
+- Each character in S will be either 'a' or 'b'.
+- patterns will contain between 1 and 5 elements, inclusive.
+- Each element in patterns will contain between 1 and 50 characters, inclusive.
+- Each character in patterns will be between '0' and '3', inclusive.
+- Each element in patterns will be at most as long as S.
+Examples
+0)
+"aaa"
+{"03","21"}
+Returns: 2
+There are two optimal solutions:
+You may change S to "AaA". This string contains an occurrence of pattern 1 at position 0 and an occurrence of pattern 0 at position 1.
+You may change S to "aAa". This string contains an occurrence of pattern 0 at position 0 and an occurrence of pattern 1 at position 1.
+In either case, the total number of occurrences of a pattern is 2.
+1)
+"aba"
+{"03","11"}
+Returns: 3
+The string "aBa" contains three occurrences of the given patterns: pattern 0 occurs at position 0, and pattern 1 occurs both at position 0 and at position 1.
+2)
+"bba"
+{"00","00"}
+Returns: 4
+Even if two patterns are equal, we count the occurrences of each of them separately.
+3)
+"bbbbbb"
+{"1110","011","100"}
+Returns: 3
+4)
+"abbaa"
+{"123"}
+Returns: 2
+5)
+"aababbaab"
+{"012","332","101", "0313"}
+Returns: 7

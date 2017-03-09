@@ -34,10 +34,6 @@ public class StepsConstruct {
     long totalVisits=0;
     boolean visitPaths(String path, int i, int j, int dirBitMap)
     {
-//        if ( !answer.isEmpty() )
-//            return answer;
-        //if (++totalVisits %100000000==0)
-        //    out.println("visit count "+totalVisits+" path "+path.length()+":"+path);
         if ( board2[i].charAt(j)=='#')
             return false;
         if (failed[i][j])

@@ -1,8 +1,4 @@
 
-import static java.lang.System.out;
-import java.util.ArrayList;
-import java.util.List;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -20,6 +16,10 @@ import java.util.List;
 // find a legal paths from (0,0) to (n-1,m-1)
 // steps can be less than required, if so, the difference should be even
 // complete required steps by reversing the first step and then repeat
+
+import static java.lang.System.out;
+import java.util.ArrayList;
+import java.util.List;
 public class StepsConstruct {
     
     int n=0;    // rows
@@ -32,62 +32,74 @@ public class StepsConstruct {
     
     
     long totalVisits=0;
-    String visitPaths(String path, int i, int j, int dirBitMap)
+    boolean visitPaths(String path, int i, int j, int dirBitMap)
     {
-        if ( !answer.isEmpty() )
-            return answer;
-        if (++totalVisits %100000000==0)
-            out.println("visit count "+totalVisits+" path "+path.length()+":"+path);
+//        if ( !answer.isEmpty() )
+//            return answer;
+        //if (++totalVisits %100000000==0)
+        //    out.println("visit count "+totalVisits+" path "+path.length()+":"+path);
         if ( board2[i].charAt(j)=='#')
-            return "";
+            return false;
+        if (failed[i][j])
+            return false;
         //out.println(path+ " at "+i+" "+j);
         if (i==n-1 && j==m-1) {
             if (path.length()<=steps && (steps-path.length())%2==0) {
                 answer = path;
-                out.println("  got it "+path);
-                return path;
+                //out.println("  got it "+path);
+                return true;
             }
-            return "";
+            return false;
         }
         if (path.length()+n-1-i+m-1-j>steps)
-            return "";
-        if ( (LEFT & dirBitMap) >0)
-            visitLeft(path, i, j);
-        if ( (RIGHT & dirBitMap) >0)
-            visitRight(path, i, j);
-        if ( (UP & dirBitMap) >0)
-            visitTop(path, i, j);
-        if ( (DOWN & dirBitMap) >0)
-            visitBottom(path, i, j);
-        return "";
+            return false;
+        if ( (LEFT & dirBitMap) >0) {
+            if ( visitLeft(path, i, j) )
+                return true;
+        }
+        if ( (RIGHT & dirBitMap) >0) {
+            if (visitRight(path, i, j))
+                return true;
+        }
+        if ( (UP & dirBitMap) >0) {
+            if (visitTop(path, i, j))
+                return true;
+        }
+        if ( (DOWN & dirBitMap) >0) {
+            if (visitBottom(path, i, j))
+                return true;
+        }
+        failed[i][j]=true;
+        return false;
     }
    
-    void visitLeft(String path, int i, int j)
+    boolean visitLeft(String path, int i, int j)
     {
         if (j--==0)
-            return;
-        visitPaths(path+"L", i,j, LEFT|DOWN|UP);
+            return false;
+        return visitPaths(path+"L", i,j, LEFT|DOWN|UP);
     }
-    void visitRight(String path, int i, int j)
+    boolean visitRight(String path, int i, int j)
     {
         if (++j==m)
-            return;
-        visitPaths(path+"R", i, j, RIGHT|UP|DOWN);
+            return false;
+        return visitPaths(path+"R", i, j, RIGHT|UP|DOWN);
     }
-    void visitTop(String path, int i, int j)
+    boolean visitTop(String path, int i, int j)
     {
         if (i--==0)
-            return;
-        visitPaths(path+"U", i, j, UP|LEFT|RIGHT);
+            return false;
+        return visitPaths(path+"U", i, j, UP|LEFT|RIGHT);
     }
     
-    void visitBottom(String path, int i, int j)
+    boolean visitBottom(String path, int i, int j)
     {
         if (++i==n)
-            return;
-        visitPaths(path+"D", i, j, DOWN|LEFT|RIGHT);
+            return false;
+        return visitPaths(path+"D", i, j, DOWN|LEFT|RIGHT);
     }
-    String construct(String[] board, int k)
+    boolean [][]failed;
+    public String construct(String[] board, int k)
     {
         n = board.length;
         steps=k;
@@ -101,9 +113,9 @@ public class StepsConstruct {
             out.println("Bad grid column "+m);
             return "";
         }
-        out.println("Board dimension "+n+", " +m);
-        visitPaths("", 0, 0, DOWN|RIGHT);
-        if ( !answer.isEmpty() && answer.length()<steps) {
+        failed = new boolean[n][m];
+        //out.println("Board dimension "+n+", " +m);
+        if ( visitPaths("", 0, 0, DOWN|RIGHT) ) {
             int repeat = (steps-answer.length())/2;
             StringBuilder build = new StringBuilder();
             build.append(answer.charAt(0));
@@ -115,11 +127,13 @@ public class StepsConstruct {
             }
             answer = build + answer.substring(1);
         }
-        out.println((answer.isEmpty()?"fail: ":("success " +answer))+" visits "+totalVisits);
+        //out.println((answer.isEmpty()?"fail: ":("success " +answer))+" visits "+totalVisits);
+        out.println(answer);
         return answer;
     }
     
-    public static void main(String[] args) {
+    static void test()
+    {
         String s;
         
         // DDRR
@@ -134,5 +148,10 @@ public class StepsConstruct {
         s = new StepsConstruct().construct(new String[]{"#.", ".."}, 2);
         // none
         s = new StepsConstruct().construct(new String[]{"...#.", "..#..", ".#..."}, 100);
+        
+    }
+    // don't submit main to topcoder
+    public static void main(String[] args) {
+        test();
     }
 }

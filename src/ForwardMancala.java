@@ -94,7 +94,7 @@ public class ForwardMancala {
         for (int i=0; i<moves.size(); i++) {
             a[i] = moves.get(i);
         }
-        out.println(moves.size()+": "+moves);
+        //out.println(moves.size()+": "+moves);
         return a;
     }
     

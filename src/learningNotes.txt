@@ -1,0 +1,3 @@
+dynamic programming with profile examples:
+  FloorBoards
+  FourBlocks, lots of bit operation

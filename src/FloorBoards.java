@@ -31,9 +31,9 @@ public class FloorBoards {
     {
         return ((p>>b) & 1)>0;
     }
-    boolean isValid(int profile, String r)
+    boolean isValid(int profile, String r)  // check if any vertical board is on cell with #
     {
-        for (int i=0; i<r.length(); i++) {  // check each cell on this row
+        for (int i=0; i<col; i++) {  // check each cell on this row
             if (bitSet(profile, i) && r.charAt(i)==PILLAR)  // vertical board on # is not allowed
                 return false;
         }
@@ -81,7 +81,7 @@ public class FloorBoards {
         out.println(new FloorBoards().layout(new String[]{"####" ,"####" ,"####" ,"####"})==0);
         out.println(new FloorBoards().layout(new String[]{"...#.." ,"##...." ,"#.#..." ,".#...." ,"..#..." ,"..#..#"})==9);
         out.println(new FloorBoards().layout(new String[]{".#...." ,"..#..." ,".....#" ,"..##.." ,"......" ,".#..#."})==9);
-     }
+    }
     public static void main(String[]args)
     {
         test();

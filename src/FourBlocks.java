@@ -36,28 +36,6 @@ public class FourBlocks {
     }
     int PROFILE;    // max value of profile
     int dp[][];     // bit of profile: cells occupied by 4 block in previous column
-    boolean bitSet(int p, int b)  // check if int p bit b is 1
-    {
-        return ((p>>b) & 1)>0;
-    }
-    boolean valid(int profile, int c)
-    {
-        for (int r=0; r<row; r++) {  // check each cell on this col
-            if (!bitSet(profile, r)) 
-                continue;
-            if (c>=col-1)  // 4 block is not allowed on last column
-                return false;
-            if (r>=row-1)  // 4 block is not allowed on last row
-                return false;
-            if (!bitSet(profile, r+1))
-                return false;   // cannot put another 4 block in next row
-            if (grid[r].charAt(c)=='1' || grid[r].charAt(c+1)=='1')
-                return false;  // 1 block exist
-            if (grid[r+1].charAt(c)=='1' || grid[r+1].charAt(c+1)=='1')
-                return false;  // 1 block exist
-        }
-        return true;        
-    }
     int countBit(int p)
     {
         int c=0;
